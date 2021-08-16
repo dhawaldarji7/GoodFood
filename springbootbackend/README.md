@@ -1,0 +1,1 @@
+The backend is built with Spring Boot, Hibernate/JPA and H2 as the database.
