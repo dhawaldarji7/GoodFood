@@ -56,6 +56,10 @@ const reducer = (state, action) => {
 
     case "EMPTY_CART":
       let emptyCart = [];
+
+      state.menu.forEach((menuItem) => {
+        menuItem.isSelected = false;
+      });
       return {
         ...state,
         cart: emptyCart,

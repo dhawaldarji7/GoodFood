@@ -43,10 +43,18 @@ function Checkout() {
 
   function goHome() {
     const subtotal = getCartTotal(cart);
-    console.log(subtotal);
+
+    const orderItems = cart.map((cartItem, index) => {
+      const { item, price } = cartItem;
+      return {
+        item: item,
+        price: price,
+      };
+    });
+
     orderService.addorder({
-      cust_name: "John",
       subtotal: subtotal,
+      orderItems: orderItems,
     });
 
     dispatch({
