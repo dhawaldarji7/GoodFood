@@ -48,5 +48,12 @@ public class orderController {
         service.deleteOrderById(id);
         return HttpStatus.OK;
     }
+
+    @DeleteMapping("/orders/all")
+    public String deleteOrderById() {
+        service.deleteAllOrders();
+        return "All orders deleted from database";
+
+    }
  
 }

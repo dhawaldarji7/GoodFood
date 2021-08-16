@@ -18,14 +18,14 @@ class orderService {
     return axios.get(BASE_URL + "/ordrers/" + orderId);
   }
 
-  // Update a order record
-  updateorder(order, orderId) {
-    return axios.get(BASE_URL + "/" + orderId, order);
-  }
-
   // delete a order record
   deleteorder(orderId) {
-    return axios.delete(BASE_URL + "/" + orderId);
+    return axios.delete(BASE_URL + "/orders/" + orderId);
+  }
+
+  // delete all order records
+  deleteallorders() {
+    return axios.delete(BASE_URL + "/orders/all");
   }
 }
 export default new orderService();

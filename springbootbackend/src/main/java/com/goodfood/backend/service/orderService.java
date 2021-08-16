@@ -55,4 +55,8 @@ public class orderService {
             throw new OrderNotFoundException("No order found for given id");
         }
     }
+
+    public void deleteAllOrders() {
+        repository.deleteAll();
+    }
 }

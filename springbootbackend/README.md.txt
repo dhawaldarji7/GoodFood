@@ -1,0 +1,1 @@
+The backend is built using Spring Boot and we use H2 as our database.
