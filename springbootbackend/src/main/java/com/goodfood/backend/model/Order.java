@@ -19,7 +19,7 @@ public class Order {
     private String cust_name;
 
     @Column(name="subtotal")
-    private Long subtotal;
+    private Double subtotal;
 
     public Long getId() {
         return id;
@@ -37,11 +37,11 @@ public class Order {
         this.cust_name = cust_name;
     }
 
-    public Long getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(Long subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
 

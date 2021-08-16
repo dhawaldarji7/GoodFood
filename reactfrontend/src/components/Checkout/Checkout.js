@@ -42,9 +42,11 @@ function Checkout() {
   }
 
   function goHome() {
+    const subtotal = getCartTotal(cart);
+    console.log(subtotal);
     orderService.addorder({
       cust_name: "John",
-      subtotal: 10,
+      subtotal: subtotal,
     });
 
     dispatch({
