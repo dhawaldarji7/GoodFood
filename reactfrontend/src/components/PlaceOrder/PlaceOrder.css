@@ -1,0 +1,90 @@
+.placeorder__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #ffffff;
+  background-color: #990099;
+}
+
+.heading {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-top: 20px;
+}
+
+.menu__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu {
+  margin-top: 30px;
+  border: 3px solid #ffffff;
+  text-align: center;
+  padding: 10px 10px;
+  border-radius: 10px;
+}
+
+.menu > tbody > tr > td {
+  padding: 10px;
+}
+
+.menu__addItem {
+  height: 20px;
+  width: 18px;
+  padding: 3px;
+}
+
+.placeorder__button {
+  height: 30px;
+  width: 200px;
+  border: none;
+  border-radius: 10px 10px;
+  margin-top: 20px;
+}
+
+.placeorder__button:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  transition: 0.1s all ease-in-out;
+}
+
+.placeorder__button:disabled {
+  cursor: not-allowed;
+}
+
+.subtotal__row {
+  text-align: center;
+}
+
+.order__container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #ffffff;
+  background: #00000050;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.order__popup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 350px;
+  margin: 0 auto;
+  height: auto;
+  background: #990099;
+  border-radius: 10px;
+  padding: 20px;
+  border: 3px solid #ffffff;
+  overflow: auto;
+}

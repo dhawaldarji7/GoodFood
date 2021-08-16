@@ -1,0 +1,31 @@
+.home__container {
+  display: flex;
+  flex-direction: column;
+  background-color: #990099;
+  color: #ffffff;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.menu__button {
+  height: 30px;
+  width: 200px;
+  margin-left: 15px;
+  border: none;
+  border-radius: 10px 10px;
+}
+
+.menu__button:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  transition: 0.1s all ease-in-out;
+}
+
+.menu__button:disabled {
+  cursor: not-allowed;
+}
+
+.message {
+  font-style: italic;
+}
