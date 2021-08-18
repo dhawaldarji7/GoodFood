@@ -2,6 +2,7 @@ package com.goodfood.backend.controller;
 
 import java.util.List;
 
+import com.goodfood.backend.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,13 @@ public class orderController {
         service.deleteAllOrders();
         return "All orders deleted from database";
 
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<List<Menu>> getMenu() {
+        List<Menu> list = service.getMenu();
+
+        return new ResponseEntity<List<Menu>>(list, new HttpHeaders(), HttpStatus.OK);
     }
  
 }

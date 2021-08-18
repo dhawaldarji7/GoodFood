@@ -8,23 +8,20 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "OrderDetails")
+@Table(name = "Menu")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class OrderDetails {
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="item")
+    @Column(name = "item")
     private String item;
 
-    @Column(name="price")
+    @Column(name = "price")
     private Double price;
-
-    @Column(name="count")
-    private Long count;
 }

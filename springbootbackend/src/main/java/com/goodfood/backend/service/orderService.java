@@ -4,18 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.goodfood.backend.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.goodfood.backend.exception.OrderNotFoundException;
 import com.goodfood.backend.model.OrderTable;
 import com.goodfood.backend.repository.orderRepository;
+import com.goodfood.backend.repository.menuRepository;
  
 @Service
 public class orderService {
      
     @Autowired
     orderRepository repository;
+
+    @Autowired
+    menuRepository menuRepo;
      
     public List<OrderTable> getAllOrders()
     {
@@ -58,5 +63,9 @@ public class orderService {
 
     public void deleteAllOrders() {
         repository.deleteAll();
+    }
+
+    public List<Menu> getMenu() {
+        return menuRepo.findAll();
     }
 }
