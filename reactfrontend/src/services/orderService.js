@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/restapi";
-
 class orderService {
   // Get all orders
   getAllOrders() {
@@ -26,6 +25,10 @@ class orderService {
   // delete all order records
   deleteallorders() {
     return axios.delete(BASE_URL + "/orders/all");
+  }
+
+  getMenu() {
+    return axios.get(BASE_URL + "/menu");
   }
 }
 export default new orderService();

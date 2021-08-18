@@ -1,5 +1,6 @@
 import "./App.css";
 import Home from "./components/Home/Home";
+import { React } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PlaceOrder from "./components/PlaceOrder/PlaceOrder";
 import Checkout from "./components/Checkout/Checkout";

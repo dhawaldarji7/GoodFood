@@ -2,13 +2,11 @@ import React from "react";
 import "./Home.css";
 import { useStateValue } from "../../StateProvider";
 import { useHistory } from "react-router-dom";
-import orderService from "../../services/orderService";
 
 function Home() {
   const [{ cart, tables }] = useStateValue();
-  let history = useHistory();
 
-  console.log(orderService.getAllOrders());
+  let history = useHistory();
 
   function placeOrder() {
     history.push("/orders/new");

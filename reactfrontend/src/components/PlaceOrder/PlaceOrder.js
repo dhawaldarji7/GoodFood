@@ -1,13 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PlaceOrder.css";
 import { useHistory } from "react-router-dom";
 import { useStateValue } from "../../StateProvider";
-import { getCartTotal } from "../../reducer";
+import { getCartTotal, getCartItems } from "../../reducer";
+import orderService from "../../services/orderService";
+import {
+  AiFillPlusCircle as Plus,
+  AiFillMinusCircle as Minus,
+} from "react-icons/ai";
 
 function PlaceOrder() {
   let history = useHistory();
-  const [{ cart, menu }, dispatch] = useStateValue();
+  const [{ cart }, dispatch] = useStateValue();
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    orderService.getMenu().then((res) => setMenu(res.data));
+  }, []);
 
   const OrderPopup = (props) => {
     return (
@@ -27,55 +37,95 @@ function PlaceOrder() {
     setOrderPlaced(!orderPlaced);
   }
 
+  function getCartIndex(id) {
+    let index = cart.findIndex((cartItem) => cartItem.id === id);
+    return index;
+  }
+
   function showMenu() {
     return menu.map((menuItem, index) => {
-      const { id, item, price } = menuItem;
+      let { id, item, price } = menuItem;
+
       return (
         <tr key={id}>
           <td>{id}</td>
           <td>{item}</td>
           <td>${price}</td>
-          <td>
+          <td className="menu__item">
+            <Plus
+              className="menu__options"
+              onClick={() => {
+                addToCart(menuItem);
+              }}
+            ></Plus>
             <input
-              type="checkbox"
-              className="menu__addItem"
-              onClick={() => handleClick(index)}
+              type="text"
+              className="menu__count"
+              disabled={true}
+              value={cart[getCartIndex(id)] ? cart[getCartIndex(id)].count : 0}
             />
+            <Minus
+              className="menu__options"
+              onClick={() => removeFromCart(id)}
+            ></Minus>
           </td>
         </tr>
       );
     });
   }
 
-  function handleClick(id) {
-    menu[id].isSelected = !menu[id].isSelected;
-
-    menu[id].isSelected === true
-      ? addToCart(menu[id].id)
-      : removeFromCart(menu[id].id);
-  }
-
-  function addToCart(id) {
-    const menuItem = menu[id - 1];
-
-    dispatch({
-      type: "ADD_TO_CART",
-      item: {
-        id: menuItem.id,
-        item: menuItem.item,
-        price: menuItem.price,
-      },
-    });
+  function addToCart(menuItem) {
+    let index = getCartIndex(menuItem.id);
+    let c = cart[index]?.count ? cart[index].count + 1 - 1 : 0;
+    if (index < 0) {
+      dispatch({
+        type: "ADD_TO_CART",
+        item: {
+          id: menuItem.id,
+          item: menuItem.item,
+          price: menuItem.price,
+          count: 1,
+        },
+      });
+    } else {
+      dispatch({
+        type: "UPDATE_CART",
+        item: {
+          index: index,
+          count: c + 1,
+        },
+      });
+    }
   }
 
   function removeFromCart(id) {
-    dispatch({
-      type: "REMOVE_FROM_CART",
-      id: id,
-    });
+    let index = getCartIndex(id);
+    let c = cart[index]?.count ? cart[index].count + 1 - 1 : 0;
+
+    if (index >= 0) {
+      if (cart[index]?.count === 1) {
+        dispatch({
+          type: "REMOVE_FROM_CART",
+          index: index,
+        });
+      } else {
+        dispatch({
+          type: "UPDATE_CART",
+          item: {
+            index: index,
+            count: c - 1,
+          },
+        });
+      }
+    } else {
+      console.warn("Can't delete item with id: ", { id });
+    }
   }
 
   function checkout() {
+    dispatch({
+      type: "DECREASE_TABLES",
+    });
     history.push("/");
   }
 
@@ -97,7 +147,7 @@ function PlaceOrder() {
         <tbody>
           {showMenu()}
           <tr className="subtotal__row">
-            <td colSpan="4">Items: {cart.length}</td>
+            <td colSpan="4">Items: {getCartItems(cart)}</td>
           </tr>
           <tr className="subtotal__row">
             <td colSpan="4">Subtotal: ${getCartTotal(cart)}</td>

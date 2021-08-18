@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Checkout.css";
 import { useHistory } from "react-router-dom";
 import { useStateValue } from "../../StateProvider";
-import { getCartTotal } from "../../reducer";
+import { getCartTotal, getCartItems } from "../../reducer";
 import orderService from "../../services/orderService";
 
 function Checkout() {
@@ -12,11 +12,11 @@ function Checkout() {
 
   function showCart() {
     return cart.map((cartItem, index) => {
-      const { id, item, price } = cartItem;
+      const { id, item, count, price } = cartItem;
       return (
         <tr key={id}>
-          <td>{id}</td>
           <td>{item}</td>
+          <td>{count}</td>
           <td>${price}</td>
         </tr>
       );
@@ -45,10 +45,11 @@ function Checkout() {
     const subtotal = getCartTotal(cart);
 
     const orderItems = cart.map((cartItem, index) => {
-      const { item, price } = cartItem;
+      const { item, price, count } = cartItem;
       return {
         item: item,
         price: price,
+        count: count,
       };
     });
 
@@ -62,7 +63,7 @@ function Checkout() {
     });
 
     dispatch({
-      type: "DECREASE_TABLES",
+      type: "INCREASE_TABLES",
     });
     history.push("/");
   }
@@ -73,15 +74,15 @@ function Checkout() {
       <table className="order__review">
         <thead>
           <tr>
-            <th>Number</th>
             <th>Item</th>
+            <th>Count</th>
             <th>Price</th>
           </tr>
         </thead>
         <tbody>
           {showCart()}
           <tr className="subtotal__row">
-            <td colSpan="4">Items: {cart.length}</td>
+            <td colSpan="4">Items: {getCartItems(cart)}</td>
           </tr>
           <tr className="subtotal__row">
             <td colSpan="4">Subtotal: ${getCartTotal(cart)}</td>

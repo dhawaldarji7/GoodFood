@@ -1,35 +1,22 @@
 export const initialState = {
   cart: [],
   tables: 10,
-
-  menu: [
-    {
-      id: 1,
-      item: "Paneer Tikka Masala",
-      price: 13.99,
-      isSelected: false,
-    },
-    {
-      id: 2,
-      item: "Chicken Tikka Masala",
-      price: 17.99,
-      isSelected: false,
-    },
-    { id: 3, item: "Jeera Rice", price: 9.99, isSelected: false },
-    { id: 4, item: "Naan", price: 3.99, isSelected: false },
-    { id: 5, item: "Garlic Naan", price: 4.99, isSelected: false },
-    { id: 6, item: "Gulab Jamun", price: 5.99, isSelected: false },
-    { id: 7, item: "Lassi", price: 2.99, isSelected: false },
-  ],
 };
 
 export const getCartTotal = (cart) => {
-  const total = cart?.reduce((amount, item) => item.price + amount, 0);
+  const total = cart?.reduce(
+    (amount, item) => item.price * item.count + amount,
+    0
+  );
   return total.toFixed(2);
 };
 
+export const getCartItems = (cart) => {
+  const totalItems = cart?.reduce((numItems, item) => item.count + numItems, 0);
+  return totalItems;
+};
+
 const reducer = (state, action) => {
-  console.log(action);
   switch (action.type) {
     case "ADD_TO_CART":
       return {
@@ -40,37 +27,55 @@ const reducer = (state, action) => {
     case "REMOVE_FROM_CART":
       let newCart = [...state.cart];
 
-      const i = state.cart.findIndex((cartItem) => cartItem.id === action.id);
-
-      if (i >= 0) {
-        //remove
-        newCart.splice(i, 1);
-      } else {
-        console.warn(`Cant remove product (id: ${action.id}).`);
-      }
+      newCart.splice(action.index, 1);
 
       return {
         ...state,
         cart: newCart,
       };
 
+    case "UPDATE_CART":
+      let updatedCart = [...state.cart];
+      let ix = action.item.index;
+      let updatedItem = updatedCart[ix];
+      updatedItem.count = action.item.count;
+
+      return {
+        ...state,
+        cart: updatedCart,
+      };
+
     case "EMPTY_CART":
       let emptyCart = [];
 
-      state.menu.forEach((menuItem) => {
-        menuItem.isSelected = false;
-      });
+      // state.menu.forEach((menuItem) => {
+      //   menuItem.isSelected = false;
+      // });
       return {
         ...state,
         cart: emptyCart,
       };
 
     case "DECREASE_TABLES":
-      let newTables = state.tables;
-      newTables -= 1;
+      let decTables = state.tables;
+      decTables -= 1;
       return {
         ...state,
-        tables: newTables,
+        tables: decTables,
+      };
+
+    case "INCREASE_TABLES":
+      let incTables = state.tables;
+      incTables += 1;
+      return {
+        ...state,
+        tables: incTables,
+      };
+
+    case "GET_MENU":
+      return {
+        ...state,
+        menu: action.item,
       };
 
     default:

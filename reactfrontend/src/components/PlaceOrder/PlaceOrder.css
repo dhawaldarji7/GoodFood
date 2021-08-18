@@ -31,10 +31,34 @@
   padding: 10px;
 }
 
-.menu__addItem {
-  height: 20px;
+.menu__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.menu__options {
+  height: 21px;
   width: 18px;
-  padding: 3px;
+}
+
+.menu__options:hover {
+  cursor: pointer;
+}
+
+.menu__count {
+  height: 16px;
+  width: 15px;
+  padding: 2px 5px;
+  border: none;
+}
+
+.menu__count:disabled {
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .placeorder__button {
