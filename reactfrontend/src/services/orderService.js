@@ -14,7 +14,7 @@ class orderService {
 
   // Find a order using orderId
   getorderById(orderId) {
-    return axios.get(BASE_URL + "/ordrers/" + orderId);
+    return axios.get(BASE_URL + "/orders/" + orderId);
   }
 
   // delete a order record

@@ -14,6 +14,7 @@ function PlaceOrder() {
   const [{ cart }, dispatch] = useStateValue();
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [menu, setMenu] = useState([]);
+  const [tableNo, setTableNo] = useState(0);
 
   useEffect(() => {
     orderService.getMenu().then((res) => setMenu(res.data));
@@ -35,6 +36,24 @@ function PlaceOrder() {
 
   function showOrderPopup() {
     setOrderPlaced(!orderPlaced);
+
+    const subtotal = getCartTotal(cart);
+
+    const orderItems = cart.map((cartItem, index) => {
+      const { item, price, count } = cartItem;
+      return {
+        item: item,
+        price: price,
+        count: count,
+      };
+    });
+
+    orderService.addorder({
+      id: tableNo,
+      subtotal: subtotal,
+      item_count: getCartItems(cart),
+      orderItems: orderItems,
+    });
   }
 
   function getCartIndex(id) {
@@ -134,34 +153,48 @@ function PlaceOrder() {
       <h1 className="heading">
         Please select desired items from the below menu
       </h1>
+      {menu?.length > 0 && (
+        <>
+          <table className="menu">
+            <thead>
+              <tr>
+                <td colSpan="4" className="table__details">
+                  Table No ▶{" "}
+                  <input
+                    type="text"
+                    className="table__number"
+                    placeholder={0}
+                    onChange={(e) => setTableNo(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>Number</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Add to Order</th>
+              </tr>
+            </thead>
+            <tbody>
+              {showMenu()}
+              <tr className="expanded__row">
+                <td colSpan="4">Items: {getCartItems(cart)}</td>
+              </tr>
+              <tr className="expanded__row">
+                <td colSpan="4">Subtotal: ${getCartTotal(cart)}</td>
+              </tr>
+            </tbody>
+          </table>
 
-      <table className="menu">
-        <thead>
-          <tr>
-            <th>Number</th>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Add to Order</th>
-          </tr>
-        </thead>
-        <tbody>
-          {showMenu()}
-          <tr className="subtotal__row">
-            <td colSpan="4">Items: {getCartItems(cart)}</td>
-          </tr>
-          <tr className="subtotal__row">
-            <td colSpan="4">Subtotal: ${getCartTotal(cart)}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <button
-        className="placeorder__button"
-        onClick={showOrderPopup}
-        disabled={cart.length > 0 ? false : true}
-      >
-        Order Now
-      </button>
+          <button
+            className="placeorder__button"
+            onClick={showOrderPopup}
+            disabled={cart.length > 0 && tableNo > 0 ? false : true}
+          >
+            Order Now
+          </button>
+        </>
+      )}
 
       {orderPlaced && (
         <OrderPopup

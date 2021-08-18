@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Checkout.css";
 import { useHistory } from "react-router-dom";
 import { useStateValue } from "../../StateProvider";
-import { getCartTotal, getCartItems } from "../../reducer";
 import orderService from "../../services/orderService";
 
 function Checkout() {
-  let [{ cart }, dispatch] = useStateValue();
+  let [, dispatch] = useStateValue();
   const [paymentDone, setPaymentDone] = useState(false);
+  const [tableNo, setTableNo] = useState(0);
+  const [order, setOrder] = useState({});
+  const [orderFetched, setOrderFetched] = useState(false);
+
   let history = useHistory();
 
   function showCart() {
-    return cart.map((cartItem, index) => {
+    return order.orderItems?.map((cartItem, index) => {
       const { id, item, count, price } = cartItem;
       return (
         <tr key={id}>
@@ -42,22 +45,6 @@ function Checkout() {
   }
 
   function goHome() {
-    const subtotal = getCartTotal(cart);
-
-    const orderItems = cart.map((cartItem, index) => {
-      const { item, price, count } = cartItem;
-      return {
-        item: item,
-        price: price,
-        count: count,
-      };
-    });
-
-    orderService.addorder({
-      subtotal: subtotal,
-      orderItems: orderItems,
-    });
-
     dispatch({
       type: "EMPTY_CART",
     });
@@ -68,31 +55,72 @@ function Checkout() {
     history.push("/");
   }
 
+  function fetchOrder(tableNo) {
+    orderService.getorderById(tableNo).then((res) => setOrder(res.data));
+    setOrderFetched(!orderFetched);
+  }
+
   return (
     <div className="checkout__container">
       <h1 className="heading">Please review the order and make payment!</h1>
-      <table className="order__review">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Count</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {showCart()}
-          <tr className="subtotal__row">
-            <td colSpan="4">Items: {getCartItems(cart)}</td>
-          </tr>
-          <tr className="subtotal__row">
-            <td colSpan="4">Subtotal: ${getCartTotal(cart)}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="fetch__order">
+        <h3 className="subheading">
+          Enter table no:
+          <input
+            type="text"
+            className="table__number"
+            placeholder={0}
+            onClick={() => {
+              setTableNo(0);
+              setOrderFetched(false);
+              setOrder({});
+            }}
+            onChange={(e) => {
+              setTableNo(e.target.value);
+            }}
+          />
+          <button
+            className="fetch__button"
+            disabled={tableNo > 0 ? false : true}
+            onClick={() => {
+              fetchOrder(tableNo);
+            }}
+          >
+            Fetch Order
+          </button>
+        </h3>
+      </div>
 
-      <button className="paynow__button" onClick={showOrderPopup}>
-        Pay Now
-      </button>
+      {orderFetched && tableNo > 0 && order.orderItems?.length > 0 && (
+        <>
+          <table className="order__review">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {showCart()}
+
+              <tr className="subtotal__row">
+                <td colSpan="4">Items: {order.item_count}</td>
+              </tr>
+              <tr className="subtotal__row">
+                <td colSpan="4">Subtotal: ${order.subtotal}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button className="paynow__button" onClick={showOrderPopup}>
+            Pay Now
+          </button>
+        </>
+      )}
+
+      {orderFetched && tableNo > 0 && order?.orderItems === undefined && (
+        <h3 className="warn">No order found for given table!</h3>
+      )}
 
       {paymentDone && (
         <OrderPopup

@@ -14,6 +14,21 @@
   margin-top: 20px;
 }
 
+.subheading {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-top: 20px;
+}
+
+.fetch__order {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 25px;
+  width: 300px;
+  justify-content: center;
+}
+
 .order__review {
   margin-top: 30px;
   border: 3px solid #ffffff;
@@ -22,8 +37,34 @@
   border-radius: 10px;
 }
 
+.fetch__button {
+  height: 25px;
+  width: 120px;
+  border: none;
+  border-radius: 10px 10px;
+  margin-left: 10px;
+}
+
+.fetch__button:hover {
+  cursor: pointer;
+  transform: scale(1.03);
+  transition: 0.1s all ease-in-out;
+}
+
+.fetch__button:disabled {
+  cursor: not-allowed;
+}
+
 .order__review > tbody > tr > td {
   padding: 10px;
+}
+
+.warn {
+  color: #ff2212;
+  font-style: italic;
+  background-color: #ffffff;
+  padding: 2px 20px;
+  border-radius: 10px;
 }
 
 .paynow__button {

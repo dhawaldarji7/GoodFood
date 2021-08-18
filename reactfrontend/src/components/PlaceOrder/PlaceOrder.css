@@ -79,7 +79,21 @@
   cursor: not-allowed;
 }
 
-.subtotal__row {
+.expanded__row {
+  text-align: center;
+}
+
+.table__details {
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid #ffffff;
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.table__number {
+  height: 15px;
+  width: 18px;
   text-align: center;
 }
 
