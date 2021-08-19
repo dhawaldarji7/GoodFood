@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.goodfood.backend.model.Menu;
 import com.goodfood.backend.model.OrderDetails;
+import com.goodfood.backend.repository.orderDetailsRepository;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class orderService {
 
     @Autowired
     menuRepository menuRepo;
+
+    @Autowired
+    orderDetailsRepository odRepo;
      
     public List<OrderTable> getAllOrders()
     {
@@ -95,4 +99,5 @@ public class orderService {
         return count;
 
     }
+
 }
