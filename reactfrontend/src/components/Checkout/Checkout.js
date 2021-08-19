@@ -10,20 +10,27 @@ function Checkout() {
   const [tableNo, setTableNo] = useState(0);
   const [order, setOrder] = useState({});
   const [orderFetched, setOrderFetched] = useState(false);
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    orderService.getMenu().then((res) => setMenu(res.data));
+  }, []);
 
   let history = useHistory();
 
   function showCart() {
-    return order.orderItems?.map((cartItem, index) => {
-      const { id, item, count, price } = cartItem;
+    return order.od?.orderItems.map((cartItem, index) => {
+      const { item_id, count } = cartItem;
+      const menuItem = menu[item_id - 1];
       return (
-        <tr key={id}>
-          <td>{item}</td>
+        <tr key={item_id}>
+          <td>{menuItem.item}</td>
           <td>{count}</td>
-          <td>${price}</td>
+          <td>{menuItem.price}</td>
         </tr>
       );
     });
+    console.log(order.od?.orderItems);
   }
 
   const OrderPopup = (props) => {
@@ -91,7 +98,7 @@ function Checkout() {
         </h3>
       </div>
 
-      {orderFetched && tableNo > 0 && order.orderItems?.length > 0 && (
+      {orderFetched && tableNo > 0 && order?.od !== undefined && (
         <>
           <table className="order__review">
             <thead>
@@ -105,10 +112,10 @@ function Checkout() {
               {showCart()}
 
               <tr className="subtotal__row">
-                <td colSpan="4">Items: {order.item_count}</td>
+                <td colSpan="4">Items: {order.count}</td>
               </tr>
               <tr className="subtotal__row">
-                <td colSpan="4">Subtotal: ${order.subtotal}</td>
+                <td colSpan="4">Subtotal: ${order.subtotal.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>
@@ -118,7 +125,7 @@ function Checkout() {
         </>
       )}
 
-      {orderFetched && tableNo > 0 && order?.orderItems === undefined && (
+      {orderFetched && tableNo > 0 && order?.od === undefined && (
         <h3 className="warn">No order found for given table!</h3>
       )}
 

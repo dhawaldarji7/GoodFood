@@ -40,18 +40,16 @@ function PlaceOrder() {
     const subtotal = getCartTotal(cart);
 
     const orderItems = cart.map((cartItem, index) => {
-      const { item, price, count } = cartItem;
+      const { id, count } = cartItem;
       return {
-        item: item,
-        price: price,
+        item_id: id,
         count: count,
       };
     });
 
+    console.log(tableNo, orderItems);
     orderService.addorder({
       id: tableNo,
-      subtotal: subtotal,
-      item_count: getCartItems(cart),
       orderItems: orderItems,
     });
   }

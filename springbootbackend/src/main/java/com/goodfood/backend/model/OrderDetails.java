@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "OrderDetails")
@@ -19,11 +20,8 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="item")
-    private String item;
-
-    @Column(name="price")
-    private Double price;
+    @Column(name = "item_id")
+    private Long item_id;
 
     @Column(name="count")
     private Long count;

@@ -2,7 +2,7 @@ package com.goodfood.backend.controller;
 
 import java.util.List;
 
-import com.goodfood.backend.model.Menu;
+import com.goodfood.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.goodfood.backend.exception.OrderNotFoundException;
-import com.goodfood.backend.model.OrderTable;
 import com.goodfood.backend.service.orderService;
+import com.goodfood.backend.model.OrderDetails;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -29,11 +29,18 @@ public class orderController {
     }
  
     @GetMapping("/orders/{id}")
-    public ResponseEntity<OrderTable> getOrderById(@PathVariable("id") Long id)
+    public ResponseEntity<OrderReview> getOrderById(@PathVariable("id") Long id)
                                                     throws OrderNotFoundException {
         OrderTable entity = service.getOrderById(id);
- 
-        return new ResponseEntity<OrderTable>(entity, new HttpHeaders(), HttpStatus.OK);
+        List<OrderDetails> items = entity.getOrderItems();
+        double subtotal = service.getSubtotal(items);
+        int count = service.getCount(items);
+
+        OrderReview or = new OrderReview();
+        or.setOd(entity);
+        or.setSubtotal(subtotal);
+        or.setCount(count);
+        return new ResponseEntity<OrderReview>(or, new HttpHeaders(), HttpStatus.OK);
     }
  
     @PostMapping("/orders")

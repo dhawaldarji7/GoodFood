@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.goodfood.backend.model.Menu;
+import com.goodfood.backend.model.OrderDetails;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +69,30 @@ public class orderService {
 
     public List<Menu> getMenu() {
         return menuRepo.findAll();
+    }
+
+    public Optional<Menu> getMenuItemById(Long id) {return menuRepo.findById(id);}
+
+    public Double getSubtotal(List<OrderDetails> items) {
+
+        double subtotal = 0;
+
+        for(OrderDetails od : items) {
+            Optional<Menu> m = getMenuItemById(od.getItem_id());
+            subtotal = subtotal + m.get().getPrice() * od.getCount();
+        }
+
+        return subtotal;
+    }
+
+    public int getCount(List<OrderDetails> items) {
+
+        int count = 0;
+
+        for(OrderDetails od : items) {
+            count += od.getCount();
+        }
+        return count;
+
     }
 }
